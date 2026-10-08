@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f7f6">
-  <title>Sudoku — a little daily reset</title>
+  <title data-i18n="pageTitle">Sudoku — a little daily reset</title>
   <style>
     :root {
       color-scheme: light;
@@ -43,6 +43,12 @@
       color: white; background: var(--green); font-size: 17px; font-weight: 800;
     }
     .top-note { color: var(--muted); font-size: 13px; }
+    .header-tools { display: flex; align-items: center; gap: 14px; }
+    .language-select { min-width: 0; padding: 7px 27px 7px 10px; font-size: 12px; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
     main { max-width: 1000px; margin: 0 auto; padding: 38px 24px 48px; }
     .intro { margin-bottom: 23px; }
     .eyebrow { color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
@@ -149,6 +155,7 @@
     }
     @media (max-width: 470px) {
       .topbar { height: 56px; padding: 0 16px; }
+      .header-tools { gap: 8px; }
       .top-note { font-size: 11px; }
       main { padding: 24px 12px 30px; }
       .game-card { padding: 14px; border-radius: 14px; }
@@ -168,52 +175,60 @@
 <body>
   <header class="topbar">
     <div class="brand"><span class="brand-mark" aria-hidden="true">9</span><span>Good Grid</span></div>
-    <div class="top-note">A little daily reset</div>
+    <div class="header-tools">
+      <div class="top-note" data-i18n="topNote">A little daily reset</div>
+      <label><span class="sr-only" data-i18n="languageLabel">Language</span>
+        <select class="language-select" id="language" aria-label="Language" data-i18n-aria-label="languageLabel">
+          <option value="en" data-i18n="english">English</option>
+          <option value="fr" data-i18n="french">Français</option>
+        </select>
+      </label>
+    </div>
   </header>
   <main>
     <section class="intro">
-      <div class="eyebrow">Your mindful moment</div>
+      <div class="eyebrow" data-i18n="eyebrow">Your mindful moment</div>
       <h1>Sudoku</h1>
-      <p class="subtitle">A fresh puzzle, just for you. Take it one square at a time.</p>
+      <p class="subtitle" data-i18n="subtitle">A fresh puzzle, just for you. Take it one square at a time.</p>
     </section>
     <div class="game-layout">
-      <section class="game-card" aria-label="Sudoku game">
+      <section class="game-card" aria-label="Sudoku game" data-i18n-aria-label="gameLabel">
         <div class="game-top">
-          <label class="level-wrap"><span class="level-label">Difficulty</span>
-            <select id="difficulty" aria-label="Puzzle difficulty">
-              <option value="easy">Easy</option>
-              <option value="medium" selected>Medium</option>
-              <option value="hard">Hard</option>
+          <label class="level-wrap"><span class="level-label" data-i18n="difficulty">Difficulty</span>
+            <select id="difficulty" aria-label="Puzzle difficulty" data-i18n-aria-label="difficulty">
+              <option value="easy" data-i18n="easy">Easy</option>
+              <option value="medium" selected data-i18n="medium">Medium</option>
+              <option value="hard" data-i18n="hard">Hard</option>
             </select>
           </label>
-          <div class="stats" aria-label="Game statistics">
-            <div class="stat"><span class="stat-icon" aria-hidden="true">◷</span><span class="stat-value" id="timer">00:00</span><span class="stat-name">Time</span></div>
-            <div class="stat"><span class="stat-icon" aria-hidden="true">✕</span><span class="stat-value" id="mistakes">0</span><span class="stat-name">Mistakes</span></div>
+          <div class="stats" aria-label="Game statistics" data-i18n-aria-label="statisticsLabel">
+            <div class="stat"><span class="stat-icon" aria-hidden="true">◷</span><span class="stat-value" id="timer">00:00</span><span class="stat-name" data-i18n="time">Time</span></div>
+            <div class="stat"><span class="stat-icon" aria-hidden="true">✕</span><span class="stat-value" id="mistakes">0</span><span class="stat-name" data-i18n="mistakes">Mistakes</span></div>
           </div>
         </div>
-        <div class="board" id="board" role="grid" aria-label="Sudoku board"></div>
-        <div class="number-pad" id="numberPad" aria-label="Choose a number"></div>
+        <div class="board" id="board" role="grid" aria-label="Sudoku board" data-i18n-aria-label="boardLabel"></div>
+        <div class="number-pad" id="numberPad" aria-label="Choose a number" data-i18n-aria-label="numberPadLabel"></div>
         <div class="action-row">
           <div class="action-group">
-            <button class="tool-btn" id="undoBtn" type="button" title="Undo (Ctrl+Z)">↶ Undo</button>
-            <button class="tool-btn" id="notesBtn" type="button" aria-pressed="false" title="Toggle pencil marks (N)">✎ Notes</button>
-            <button class="tool-btn" id="hintBtn" type="button" title="Fill a cell with its solution">✦ Hint</button>
+            <button class="tool-btn" id="undoBtn" type="button" title="Undo (Ctrl+Z)" data-i18n-title="undoTitle">↶ <span data-i18n="undo">Undo</span></button>
+            <button class="tool-btn" id="notesBtn" type="button" aria-pressed="false" title="Toggle pencil marks (N)" data-i18n-title="notesTitle">✎ <span data-i18n="notes">Notes</span></button>
+            <button class="tool-btn" id="hintBtn" type="button" title="Fill a cell with its solution" data-i18n-title="hintTitle">✦ <span data-i18n="hint">Hint</span></button>
           </div>
-          <button class="new-game" id="newGameBtn" type="button">New game</button>
+          <button class="new-game" id="newGameBtn" type="button" data-i18n="newGame">New game</button>
         </div>
         <p class="message" id="message" role="status" aria-live="polite"></p>
       </section>
       <aside class="side-column">
         <section class="side-card">
-          <h2>How to play</h2>
-          <div class="how-item"><span class="how-icon">1</span><div class="how-copy"><strong>Fill the grid</strong>Every row, column, and 3×3 box needs 1–9.</div></div>
-          <div class="how-item"><span class="how-icon">⌁</span><div class="how-copy"><strong>Pick a square</strong>Tap a cell, then choose a number. You can also type.</div></div>
-          <div class="how-item"><span class="how-icon">✎</span><div class="how-copy"><strong>Make a note</strong>Toggle Notes to pencil in possibilities.</div></div>
-          <div class="shortcut-note">Keyboard: 1–9 to enter · Backspace to erase · N for notes · Ctrl/⌘+Z to undo</div>
+          <h2 data-i18n="howToPlay">How to play</h2>
+          <div class="how-item"><span class="how-icon">1</span><div class="how-copy"><strong data-i18n="fillGrid">Fill the grid</strong><span data-i18n="fillGridDescription">Every row, column, and 3×3 box needs 1–9.</span></div></div>
+          <div class="how-item"><span class="how-icon">⌁</span><div class="how-copy"><strong data-i18n="pickSquare">Pick a square</strong><span data-i18n="pickSquareDescription">Tap a cell, then choose a number. You can also type.</span></div></div>
+          <div class="how-item"><span class="how-icon">✎</span><div class="how-copy"><strong data-i18n="makeNote">Make a note</strong><span data-i18n="makeNoteDescription">Toggle Notes to pencil in possibilities.</span></div></div>
+          <div class="shortcut-note" data-i18n="shortcuts">Keyboard: 1–9 to enter · Backspace to erase · N for notes · Ctrl/⌘+Z to undo</div>
         </section>
         <section class="side-card daily-card">
-          <h2>Make space to focus</h2>
-          <p>A few quiet minutes can make all the difference. Enjoy the puzzle at your own pace—there’s no rush.</p>
+          <h2 data-i18n="focusTitle">Make space to focus</h2>
+          <p data-i18n="focusDescription">A few quiet minutes can make all the difference. Enjoy the puzzle at your own pace—there’s no rush.</p>
         </section>
       </aside>
     </div>
@@ -221,9 +236,9 @@
   <div class="overlay" id="winOverlay" role="dialog" aria-modal="true" aria-labelledby="winTitle">
     <div class="win-modal">
       <div class="win-emoji" aria-hidden="true">✨</div>
-      <h2 id="winTitle">Lovely work!</h2>
-      <p id="winSummary">Puzzle complete.</p>
-      <button class="new-game" id="playAgainBtn" type="button">Play again</button>
+      <h2 id="winTitle" data-i18n="winTitle">Lovely work!</h2>
+      <p id="winSummary" data-i18n="winSummary">Puzzle complete.</p>
+      <button class="new-game" id="playAgainBtn" type="button" data-i18n="playAgain">Play again</button>
     </div>
   </div>
 
@@ -238,7 +253,7 @@
 <!-- END AADS AD UNIT 2457706 -->
 <div style="text-align: center;">
   <br>
-By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogreen.ca</a>
+<span data-i18n="by">By</span> <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogreen.ca</a>
   <br><br><br>
 </div>
 
@@ -249,6 +264,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
       const boardEl = document.querySelector("#board");
       const padEl = document.querySelector("#numberPad");
       const difficultyEl = document.querySelector("#difficulty");
+      const languageEl = document.querySelector("#language");
       const timerEl = document.querySelector("#timer");
       const mistakesEl = document.querySelector("#mistakes");
       const messageEl = document.querySelector("#message");
@@ -266,6 +282,167 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
       let timerId = null;
       let history = [];
       let finished = false;
+      let language = "en";
+      let messageKey = "startPrompt";
+      let messageKind = "";
+
+      const translations = {
+        en: {
+          pageTitle: "Sudoku — a little daily reset",
+          topNote: "A little daily reset",
+          languageLabel: "Language",
+          english: "English",
+          french: "Français",
+          eyebrow: "Your mindful moment",
+          subtitle: "A fresh puzzle, just for you. Take it one square at a time.",
+          gameLabel: "Sudoku game",
+          difficulty: "Difficulty",
+          easy: "Easy",
+          medium: "Medium",
+          hard: "Hard",
+          statisticsLabel: "Game statistics",
+          time: "Time",
+          mistakes: "Mistakes",
+          boardLabel: "Sudoku board",
+          numberPadLabel: "Choose a number",
+          undoTitle: "Undo (Ctrl+Z)",
+          undo: "Undo",
+          notesTitle: "Toggle pencil marks (N)",
+          notes: "Notes",
+          hintTitle: "Fill a cell with its solution",
+          hint: "Hint",
+          newGame: "New game",
+          howToPlay: "How to play",
+          fillGrid: "Fill the grid",
+          fillGridDescription: "Every row, column, and 3×3 box needs 1–9.",
+          pickSquare: "Pick a square",
+          pickSquareDescription: "Tap a cell, then choose a number. You can also type.",
+          makeNote: "Make a note",
+          makeNoteDescription: "Toggle Notes to pencil in possibilities.",
+          shortcuts: "Keyboard: 1–9 to enter · Backspace to erase · N for notes · Ctrl/⌘+Z to undo",
+          focusTitle: "Make space to focus",
+          focusDescription: "A few quiet minutes can make all the difference. Enjoy the puzzle at your own pace—there’s no rush.",
+          winTitle: "Lovely work!",
+          winSummary: "Puzzle complete.",
+          playAgain: "Play again",
+          by: "By",
+          startPrompt: "Select an empty square to get started.",
+          fixedCell: "That number is part of the puzzle.",
+          chooseNumber: "Choose a number or type one on your keyboard.",
+          selectEmpty: "Select an empty square first.",
+          pencilUpdated: "Pencil mark updated.",
+          notQuite: "Not quite—keep going, you’ve got this.",
+          niceOne: "Nice one!",
+          squareCleared: "Square cleared.",
+          lastMoveUndone: "Last move undone.",
+          puzzleComplete: "Puzzle complete. Beautifully done!",
+          chooseEmptyHint: "Choose an empty square to use a hint.",
+          hintNudge: "A little nudge in the right direction.",
+          notesOn: "Notes mode is on.",
+          notesOff: "Notes mode is off.",
+          empty: "empty",
+          given: "given",
+          enterNumber: "Enter {digit}",
+          winSummaryOne: "You finished in {time} with {mistakes} mistake.",
+          winSummaryMany: "You finished in {time} with {mistakes} mistakes."
+        },
+        fr: {
+          pageTitle: "Sudoku — une petite pause au quotidien",
+          topNote: "Une petite pause au quotidien",
+          languageLabel: "Langue",
+          english: "English",
+          french: "Français",
+          eyebrow: "Votre moment de pleine conscience",
+          subtitle: "Une nouvelle grille rien que pour vous. Avancez case par case.",
+          gameLabel: "Jeu de sudoku",
+          difficulty: "Difficulté",
+          easy: "Facile",
+          medium: "Moyen",
+          hard: "Difficile",
+          statisticsLabel: "Statistiques de la partie",
+          time: "Temps",
+          mistakes: "Erreurs",
+          boardLabel: "Grille de sudoku",
+          numberPadLabel: "Choisir un chiffre",
+          undoTitle: "Annuler (Ctrl+Z)",
+          undo: "Annuler",
+          notesTitle: "Activer les notes (N)",
+          notes: "Notes",
+          hintTitle: "Remplir une case avec sa solution",
+          hint: "Indice",
+          newGame: "Nouvelle partie",
+          howToPlay: "Comment jouer",
+          fillGrid: "Remplir la grille",
+          fillGridDescription: "Chaque ligne, colonne et carré de 3×3 doit contenir les chiffres de 1 à 9.",
+          pickSquare: "Choisir une case",
+          pickSquareDescription: "Touchez une case, puis choisissez un chiffre. Vous pouvez aussi le saisir au clavier.",
+          makeNote: "Prendre des notes",
+          makeNoteDescription: "Activez les notes pour inscrire les possibilités.",
+          shortcuts: "Clavier : 1–9 pour saisir · Retour arrière pour effacer · N pour les notes · Ctrl/⌘+Z pour annuler",
+          focusTitle: "Un moment pour se concentrer",
+          focusDescription: "Quelques minutes au calme peuvent tout changer. Profitez de la grille à votre rythme, sans vous presser.",
+          winTitle: "Bravo !",
+          winSummary: "Grille terminée.",
+          playAgain: "Rejouer",
+          by: "Par",
+          startPrompt: "Choisissez une case vide pour commencer.",
+          fixedCell: "Ce chiffre fait partie de la grille.",
+          chooseNumber: "Choisissez un chiffre ou saisissez-le au clavier.",
+          selectEmpty: "Choisissez d’abord une case vide.",
+          pencilUpdated: "Note mise à jour.",
+          notQuite: "Pas tout à fait — continuez, vous allez y arriver.",
+          niceOne: "Bien joué !",
+          squareCleared: "Case effacée.",
+          lastMoveUndone: "Dernier coup annulé.",
+          puzzleComplete: "Grille terminée. Magnifique !",
+          chooseEmptyHint: "Choisissez une case vide pour utiliser un indice.",
+          hintNudge: "Un petit coup de pouce dans la bonne direction.",
+          notesOn: "Mode notes activé.",
+          notesOff: "Mode notes désactivé.",
+          empty: "vide",
+          given: "donnée",
+          enterNumber: "Saisir le {digit}",
+          winSummaryOne: "Terminé en {time} avec {mistakes} erreur.",
+          winSummaryMany: "Terminé en {time} avec {mistakes} erreurs."
+        }
+      };
+
+      function t(key, values = {}) {
+        return translations[language][key].replace(/\{(\w+)\}/g, (_, name) => values[name] ?? "");
+      }
+
+      function showMessage(key, kind = "") {
+        messageKey = key;
+        messageKind = kind;
+        messageEl.textContent = t(key);
+        messageEl.className = kind ? `message ${kind}` : "message";
+      }
+
+      function updateWinSummary() {
+        const key = mistakes === 1 ? "winSummaryOne" : "winSummaryMany";
+        document.querySelector("#winSummary").textContent = t(key, {
+          time: timerEl.textContent,
+          mistakes
+        });
+      }
+
+      function setLanguage(nextLanguage) {
+        language = nextLanguage;
+        languageEl.value = language;
+        document.documentElement.lang = language;
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          element.textContent = t(element.dataset.i18n);
+        });
+        document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+          element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+        });
+        document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+          element.setAttribute("title", t(element.dataset.i18nTitle));
+        });
+        showMessage(messageKey, messageKind);
+        if (finished) updateWinSummary();
+        if (solution.length) render();
+      }
 
       const shuffled = (items) => {
         const result = [...items];
@@ -304,8 +481,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         winOverlay.classList.remove("show");
         notesBtn.classList.remove("active");
         notesBtn.setAttribute("aria-pressed", "false");
-        messageEl.textContent = "Select an empty square to get started.";
-        messageEl.className = "message";
+        showMessage("startPrompt");
         mistakesEl.textContent = "0";
         updateTimer();
         clearInterval(timerId);
@@ -334,7 +510,9 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
             cell.type = "button";
             cell.className = "cell";
             cell.setAttribute("role", "gridcell");
-            cell.setAttribute("aria-label", `Row ${row + 1}, column ${col + 1}${value ? `, ${value}` : ", empty"}${puzzle[row][col] ? ", given" : ""}`);
+            const cellDescription = value ? String(value) : t("empty");
+            const givenDescription = puzzle[row][col] ? `, ${t("given")}` : "";
+            cell.setAttribute("aria-label", `${language === "fr" ? "Ligne" : "Row"} ${row + 1}, ${language === "fr" ? "colonne" : "column"} ${col + 1}, ${cellDescription}${givenDescription}`);
             if (puzzle[row][col]) cell.classList.add("given");
             if (selected >= 0 && (row === selectedRow || col === selectedCol ||
                 (Math.floor(row / 3) === Math.floor(selectedRow / 3) && Math.floor(col / 3) === Math.floor(selectedCol / 3)))) cell.classList.add("related");
@@ -356,8 +534,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
             }
             cell.addEventListener("click", () => {
               selected = index;
-              messageEl.textContent = puzzle[row][col] ? "That number is part of the puzzle." : "Choose a number or type one on your keyboard.";
-              messageEl.className = "message";
+              showMessage(puzzle[row][col] ? "fixedCell" : "chooseNumber");
               render();
               boardEl.children[index].focus({ preventScroll: true });
             });
@@ -370,7 +547,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
           button.type = "button";
           button.className = "number-btn";
           button.textContent = String(digit);
-          button.setAttribute("aria-label", `Enter ${digit}`);
+          button.setAttribute("aria-label", t("enterNumber", { digit }));
           const count = values.flat().filter((value, index) =>
             value === digit && solution[Math.floor(index / SIZE)][index % SIZE] === digit
           ).length;
@@ -391,23 +568,20 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
 
       function enterDigit(digit) {
         if (selected < 0 || finished) {
-          messageEl.textContent = "Select an empty square first.";
-          messageEl.className = "message error";
+          showMessage("selectEmpty", "error");
           return;
         }
         const row = Math.floor(selected / SIZE);
         const col = selected % SIZE;
         if (puzzle[row][col]) {
-          messageEl.textContent = "That number is part of the puzzle.";
-          messageEl.className = "message";
+          showMessage("fixedCell");
           return;
         }
         if (noteMode) {
           saveState();
           if (values[row][col]) values[row][col] = 0;
           notes[row][col].has(digit) ? notes[row][col].delete(digit) : notes[row][col].add(digit);
-          messageEl.textContent = "Pencil mark updated.";
-          messageEl.className = "message";
+          showMessage("pencilUpdated");
         } else {
           if (values[row][col] === digit) return;
           saveState();
@@ -415,11 +589,9 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
           values[row][col] = digit;
           if (digit !== solution[row][col]) {
             mistakes++;
-            messageEl.textContent = "Not quite—keep going, you’ve got this.";
-            messageEl.className = "message error";
+            showMessage("notQuite", "error");
           } else {
-            messageEl.textContent = "Nice one!";
-            messageEl.className = "message";
+            showMessage("niceOne");
           }
           mistakesEl.textContent = String(mistakes);
           checkComplete();
@@ -435,8 +607,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         saveState();
         values[row][col] = 0;
         notes[row][col].clear();
-        messageEl.textContent = "Square cleared.";
-        messageEl.className = "message";
+        showMessage("squareCleared");
         render();
       }
 
@@ -447,8 +618,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         notes = previous.notes;
         mistakes = previous.mistakes;
         mistakesEl.textContent = String(mistakes);
-        messageEl.textContent = "Last move undone.";
-        messageEl.className = "message";
+        showMessage("lastMoveUndone");
         render();
       }
 
@@ -456,11 +626,10 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         if (values.every((row, r) => row.every((value, c) => value === solution[r][c]))) {
           finished = true;
           clearInterval(timerId);
-          document.querySelector("#winSummary").textContent = `You finished in ${timerEl.textContent} with ${mistakes} ${mistakes === 1 ? "mistake" : "mistakes"}.`;
+          updateWinSummary();
           winOverlay.classList.add("show");
           setTimeout(() => document.querySelector("#playAgainBtn").focus(), 0);
-          messageEl.textContent = "Puzzle complete. Beautifully done!";
-          messageEl.className = "message success";
+          showMessage("puzzleComplete", "success");
         }
       }
 
@@ -479,15 +648,13 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         const row = Math.floor(index / SIZE);
         const col = index % SIZE;
         if (puzzle[row][col]) {
-          messageEl.textContent = "Choose an empty square to use a hint.";
-          messageEl.className = "message";
+          showMessage("chooseEmptyHint");
           return;
         }
         saveState();
         values[row][col] = solution[row][col];
         notes[row][col].clear();
-        messageEl.textContent = "A little nudge in the right direction.";
-        messageEl.className = "message";
+        showMessage("hintNudge");
         checkComplete();
         render();
       }
@@ -495,12 +662,12 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
       document.querySelector("#newGameBtn").addEventListener("click", startGame);
       document.querySelector("#playAgainBtn").addEventListener("click", startGame);
       difficultyEl.addEventListener("change", startGame);
+      languageEl.addEventListener("change", () => setLanguage(languageEl.value));
       notesBtn.addEventListener("click", () => {
         noteMode = !noteMode;
         notesBtn.classList.toggle("active", noteMode);
         notesBtn.setAttribute("aria-pressed", String(noteMode));
-        messageEl.textContent = noteMode ? "Notes mode is on." : "Notes mode is off.";
-        messageEl.className = "message";
+        showMessage(noteMode ? "notesOn" : "notesOff");
       });
       undoBtn.addEventListener("click", undo);
       document.querySelector("#hintBtn").addEventListener("click", hint);
@@ -533,6 +700,7 @@ By <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogr
         }
       });
 
+      setLanguage(language);
       startGame();
     })();
   </script>
