@@ -53,6 +53,12 @@
     .top-note { color: var(--muted); font-size: 13px; }
     .header-tools { display: flex; align-items: center; gap: 14px; }
     .language-select { min-width: 0; padding: 7px 27px 7px 10px; font-size: 12px; }
+    .install-btn {
+      padding: 7px 12px; border: 0; border-radius: 9px; cursor: pointer;
+      color: white; background: var(--green); font-size: 12px; font-weight: 700;
+    }
+    .install-btn:hover { background: var(--green-dark); }
+    .install-btn[hidden] { display: none; }
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
@@ -165,6 +171,7 @@
       .topbar { height: 56px; padding: 0 16px; }
       .header-tools { gap: 8px; }
       .top-note { font-size: 11px; }
+      .header-tools:has(.install-btn:not([hidden])) .top-note { display: none; }
       main { padding: 24px 12px 30px; }
       .game-card { padding: 14px; border-radius: 14px; }
       .game-top { align-items: flex-start; }
@@ -185,6 +192,7 @@
     <div class="brand"><span class="brand-mark" aria-hidden="true">9</span><span>Good Grid</span></div>
     <div class="header-tools">
       <div class="top-note" data-i18n="topNote">A little daily reset</div>
+      <button class="install-btn" id="installBtn" type="button" data-i18n="install" hidden>Install app</button>
       <label><span class="sr-only" data-i18n="languageLabel">Language</span>
         <select class="language-select" id="language" aria-label="Language" data-i18n-aria-label="languageLabel">
           <option value="en" data-i18n="english">English</option>
@@ -298,6 +306,7 @@
         en: {
           pageTitle: "Sudoku — a little daily reset",
           topNote: "A little daily reset",
+          install: "Install app",
           languageLabel: "Language",
           english: "English",
           french: "Français",
@@ -357,6 +366,7 @@
         fr: {
           pageTitle: "Sudoku — une petite pause au quotidien",
           topNote: "Une petite pause au quotidien",
+          install: "Installer l’app",
           languageLabel: "Langue",
           english: "English",
           french: "Français",
@@ -716,6 +726,23 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
     }
+
+    // Chrome/Edge/Samsung Internet fire this when the app is installable; offer a visible button.
+    const installBtn = document.querySelector('#installBtn');
+    let installPrompt = null;
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      installPrompt = event;
+      installBtn.hidden = false;
+    });
+    installBtn.addEventListener('click', async () => {
+      if (!installPrompt) return;
+      installPrompt.prompt();
+      await installPrompt.userChoice;
+      installPrompt = null;
+      installBtn.hidden = true;
+    });
+    window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
   </script>
 </body>
 </html>

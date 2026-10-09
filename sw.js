@@ -1,4 +1,4 @@
-const CACHE = 'good-grid-v1';
+const CACHE = 'good-grid-v2';
 const ASSETS = [
   './',
   './index.html',
