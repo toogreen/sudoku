@@ -1,7 +1,8 @@
-const CACHE = 'good-grid-v2';
+const CACHE = 'good-grid-v3';
 const ASSETS = [
   './',
   './index.html',
+  './privacy.html',
   './manifest.webmanifest',
   './icons/icon-192.png',
   './icons/icon-512.png',

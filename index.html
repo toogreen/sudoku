@@ -2,15 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V95H3K8G8T"></script>
+  <meta name="google-adsense-account" content="ca-pub-5829964164858117">
   <script>
+    // Quebec's Law 25: ad cookies, personalised ads and Google Analytics stay off until the player
+    // accepts them. Google Consent Mode tells AdSense what was chosen; the consent banner updates it.
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-V95H3K8G8T');
+    // Google Analytics (G-V95H3K8G8T) is only fetched once the player has accepted
+    function loadAnalytics() {
+      if (loadAnalytics.done) return;
+      loadAnalytics.done = true;
+      gtag('js', new Date());
+      gtag('config', 'G-V95H3K8G8T');
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-V95H3K8G8T';
+      document.head.appendChild(s);
+    }
+    (function () {
+      var ok = false;
+      try { ok = localStorage.getItem('sudoku-consent') === 'granted'; } catch (e) { }
+      var v = ok ? 'granted' : 'denied';
+      gtag('consent', 'default', { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v });
+      if (ok) loadAnalytics();
+      else (window.adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = 1;
+    })();
   </script>
+  <!-- Google AdSense (Auto Ads) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5829964164858117" crossorigin="anonymous"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f7f6">
   <meta name="description" content="Sudoku — a little daily reset.">
@@ -170,6 +189,26 @@
     .win-emoji { font-size: 36px; }
     .win-modal h2 { margin: 10px 0 6px; font-size: 25px; letter-spacing: -.04em; }
     .win-modal p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+    .legal { margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .legal a, .legal button { color: var(--muted); font: inherit; }
+    .legal button { padding: 0; border: 0; background: none; text-decoration: underline; cursor: pointer; }
+    /* Cookie consent: Accept and Refuse are given equal weight, as Law 25 expects a free choice */
+    .consent {
+      position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+      z-index: 100000; width: min(560px, calc(100vw - 24px)); box-sizing: border-box;
+      padding: 16px 18px; border: 1px solid var(--line); border-radius: 16px;
+      background: var(--paper); color: var(--ink); font-size: 13px; line-height: 1.5;
+      box-shadow: 0 18px 55px rgb(31 67 55 / 22%);
+    }
+    .consent[hidden] { display: none; }
+    .consent p { margin: 0 0 12px; }
+    .consent a { color: var(--green); }
+    .consent-btns { display: flex; gap: 10px; }
+    .consent-btns button {
+      flex: 1; padding: 9px 12px; border: 0; border-radius: 10px; cursor: pointer;
+      color: white; background: var(--green); font-weight: 700;
+    }
+    .consent-btns button:hover { background: var(--green-dark); }
     @media (max-width: 760px) {
       main { max-width: 560px; padding-top: 28px; }
       .game-layout { grid-template-columns: 1fr; }
@@ -279,8 +318,19 @@
 <div style="text-align: center;">
   <br>
 <span data-i18n="by">By</span> <a href="https://toogreen.ca" target="_blank" rel="noopener noreferrer">toogreen.ca</a>
+  <div class="legal">
+    <a id="privacyLink" href="privacy.html" data-i18n="privacy">Privacy policy</a> •
+    <button id="consentOpen" type="button" data-i18n="cookieSettings">Cookie settings</button>
+  </div>
   <br><br><br>
 </div>
+  <div class="consent" id="consent" role="dialog" aria-live="polite" aria-labelledby="consentMsg" hidden>
+    <p id="consentMsg"><span data-i18n="consentText"></span> <a id="consentMore" href="privacy.html" data-i18n="consentMore"></a></p>
+    <div class="consent-btns">
+      <button id="consentNo" type="button" data-i18n="consentNo">Refuse</button>
+      <button id="consentYes" type="button" data-i18n="consentYes">Accept</button>
+    </div>
+  </div>
 
   <script>
     (() => {
@@ -370,7 +420,13 @@
           given: "given",
           enterNumber: "Enter {digit}",
           winSummaryOne: "You finished in {time} with {mistakes} mistake.",
-          winSummaryMany: "You finished in {time} with {mistakes} mistakes."
+          winSummaryMany: "You finished in {time} with {mistakes} mistakes.",
+          privacy: "Privacy policy",
+          cookieSettings: "Cookie settings",
+          consentText: "This free game is funded by ads. With your OK, Google can use cookies to show you personalised ads and to measure visits with Google Analytics. If you refuse, you will still see ads, just not personalised ones, and your visit is not measured.",
+          consentMore: "Learn more",
+          consentYes: "Accept",
+          consentNo: "Refuse"
         },
         fr: {
           pageTitle: "Sudoku — une petite pause au quotidien",
@@ -430,7 +486,13 @@
           given: "donnée",
           enterNumber: "Saisir le {digit}",
           winSummaryOne: "Terminé en {time} avec {mistakes} erreur.",
-          winSummaryMany: "Terminé en {time} avec {mistakes} erreurs."
+          winSummaryMany: "Terminé en {time} avec {mistakes} erreurs.",
+          privacy: "Politique de confidentialité",
+          cookieSettings: "Paramètres des témoins",
+          consentText: "Ce jeu gratuit est financé par la publicité. Avec votre accord, Google peut utiliser des témoins (cookies) pour vous montrer des annonces personnalisées et pour mesurer les visites avec Google Analytics. Si vous refusez, vous verrez quand même des annonces, mais non personnalisées, et votre visite ne sera pas mesurée.",
+          consentMore: "En savoir plus",
+          consentYes: "Accepter",
+          consentNo: "Refuser"
         }
       };
 
@@ -466,6 +528,9 @@
         document.querySelectorAll("[data-i18n-title]").forEach((element) => {
           element.setAttribute("title", t(element.dataset.i18nTitle));
         });
+        // the privacy page opens in the same language as the game
+        document.querySelector("#privacyLink").href = `privacy.html#${language}`;
+        document.querySelector("#consentMore").href = `privacy.html#${language}`;
         showMessage(messageKey, messageKind);
         if (finished) updateWinSummary();
         if (solution.length) render();
@@ -752,6 +817,22 @@
       installBtn.hidden = true;
     });
     window.addEventListener('appinstalled', () => { installBtn.hidden = true; });
+
+    // Cookie consent (Quebec's Law 25). Ads load either way; until the player accepts, Consent Mode
+    // keeps them non-personalised and cookie-free, and Google Analytics isn't loaded (see <head>).
+    const consentEl = document.querySelector('#consent');
+    function setConsent(granted) {
+      const v = granted ? 'granted' : 'denied';
+      try { localStorage.setItem('sudoku-consent', v); } catch (e) { }
+      gtag('consent', 'update', { ad_storage: v, ad_user_data: v, ad_personalization: v, analytics_storage: v });
+      if (granted) loadAnalytics();
+      (window.adsbygoogle = window.adsbygoogle || []).requestNonPersonalizedAds = granted ? 0 : 1;
+      consentEl.hidden = true;
+    }
+    document.querySelector('#consentYes').addEventListener('click', () => setConsent(true));
+    document.querySelector('#consentNo').addEventListener('click', () => setConsent(false));
+    document.querySelector('#consentOpen').addEventListener('click', () => { consentEl.hidden = false; });
+    try { consentEl.hidden = !!localStorage.getItem('sudoku-consent'); } catch (e) { consentEl.hidden = false; }
   </script>
 </body>
 </html>
